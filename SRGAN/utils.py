@@ -55,12 +55,13 @@ def plot_examples(low_res_folder, gen):
 
     gen.eval()
     for file in files:
-        image = Image.open("test_images/" + file)
+        image = Image.open("test_images_LR/" + file)
         with torch.no_grad():
             upscaled_img = gen(
                 config.test_transform(image=np.asarray(image))["image"]
                 .unsqueeze(0)
                 .to(config.DEVICE)
             )
+        # os.makedirs("saved/", exist_ok=True)
         save_image(upscaled_img * 0.5 + 0.5, f"saved/{file}")
     gen.train()

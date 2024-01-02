@@ -19,7 +19,7 @@ def train_fn(loader, disc, gen, opt_gen, opt_disc, mse, bce, vgg_loss):
         high_res = high_res.to(config.DEVICE)
         low_res = low_res.to(config.DEVICE)
 
-        ### Train Discriminator: max log(D(x)) + log(1 - D(G(z)))
+        # Train Discriminator: max log(D(x)) + log(1 - D(G(z)))
         fake = gen(low_res)
         disc_real = disc(high_res)
         disc_fake = disc(fake.detach())
@@ -45,7 +45,7 @@ def train_fn(loader, disc, gen, opt_gen, opt_disc, mse, bce, vgg_loss):
         opt_gen.step()
 
         if idx % 200 == 0:
-            plot_examples("test_images/", gen)
+            plot_examples("test_images_LR/", gen)
 
 
 def main():
@@ -82,6 +82,7 @@ def main():
         if config.SAVE_MODEL:
             save_checkpoint(gen, opt_gen, filename=config.CHECKPOINT_GEN)
             save_checkpoint(disc, opt_disc, filename=config.CHECKPOINT_DISC)
+            config.LOAD_MODEL = True
 
 
 if __name__ == "__main__":
