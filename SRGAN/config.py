@@ -9,7 +9,7 @@ CHECKPOINT_GEN = "gen.pth.tar"
 CHECKPOINT_DISC = "disc.pth.tar"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 LEARNING_RATE = 1e-4
-NUM_EPOCHS = 10000
+NUM_EPOCHS = 100000
 BATCH_SIZE = 16
 NUM_WORKERS = 4
 HIGH_RES = 96
@@ -25,7 +25,7 @@ highres_transform = A.Compose(
 
 lowres_transform = A.Compose(
     [
-        A.Resize(width=LOW_RES, height=LOW_RES, interpolation=Image.BICUBIC),
+        A.Resize(width=LOW_RES, height=LOW_RES, interpolation=Image.BICUBIC),  #resizing (24 x 24) and bicubic downscaling
         A.Normalize(mean=[0, 0, 0], std=[1, 1, 1]),
         ToTensorV2(),
     ]
@@ -33,7 +33,7 @@ lowres_transform = A.Compose(
 
 both_transforms = A.Compose(
     [
-        A.RandomCrop(width=HIGH_RES, height=HIGH_RES),
+        A.RandomCrop(width=HIGH_RES, height=HIGH_RES),        #to take random crop 96 x 96
         A.HorizontalFlip(p=0.5),
         A.RandomRotate90(p=0.5),
     ]

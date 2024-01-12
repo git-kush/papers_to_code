@@ -24,7 +24,7 @@ def train_fn(loader, disc, gen, opt_gen, opt_disc, mse, bce, vgg_loss):
         disc_real = disc(high_res)
         disc_fake = disc(fake.detach())
         disc_loss_real = bce(
-            disc_real, torch.ones_like(disc_real) - 0.1 * torch.rand_like(disc_real)
+            disc_real, torch.ones_like(disc_real) - 0.1 * torch.rand_like(disc_real)  # label-smoothing
         )
         disc_loss_fake = bce(disc_fake, torch.zeros_like(disc_fake))
         loss_disc = disc_loss_fake + disc_loss_real
@@ -35,7 +35,7 @@ def train_fn(loader, disc, gen, opt_gen, opt_disc, mse, bce, vgg_loss):
 
         # Train Generator: min log(1 - D(G(z))) <-> max log(D(G(z))
         disc_fake = disc(fake)
-        # l2_loss = mse(fake, high_res)
+        l2_loss = mse(fake, high_res)
         adversarial_loss = 1e-3 * bce(disc_fake, torch.ones_like(disc_fake))
         loss_for_vgg = 0.006 * vgg_loss(fake, high_res)
         gen_loss = loss_for_vgg + adversarial_loss
@@ -44,12 +44,12 @@ def train_fn(loader, disc, gen, opt_gen, opt_disc, mse, bce, vgg_loss):
         gen_loss.backward()
         opt_gen.step()
 
-        if idx % 200 == 0:
-            plot_examples("test_images_LR/", gen)
+        if idx % 5 == 0:
+            plot_examples("test_data_LR/", gen)
 
 
 def main():
-    dataset = ImageFolder(root_dir="data/")
+    dataset = ImageFolder(root_dir="train_data/")
     loader = DataLoader(
         dataset,
         batch_size=config.BATCH_SIZE,
@@ -82,7 +82,6 @@ def main():
         if config.SAVE_MODEL:
             save_checkpoint(gen, opt_gen, filename=config.CHECKPOINT_GEN)
             save_checkpoint(disc, opt_disc, filename=config.CHECKPOINT_DISC)
-            config.LOAD_MODEL = True
 
 
 if __name__ == "__main__":

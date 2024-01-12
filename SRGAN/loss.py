@@ -1,13 +1,13 @@
 import torch.nn as nn
-from torchvision.models import vgg19
+from torchvision.models import vgg19, VGG19_Weights
 import config
 
-# phi_5,4 5th conv layer before maxpooling but after activation
 
 class VGGLoss(nn.Module):
     def __init__(self):
         super().__init__()
-        self.vgg = vgg19(pretrained=True).features[:36].eval().to(config.DEVICE)
+        # phi_5,4 5th conv layer before maxpooling but after activation on printing comes out to be at 36
+        self.vgg = vgg19(weights=VGG19_Weights).features[:36].eval().to(config.DEVICE)
         self.loss = nn.MSELoss()
 
         for param in self.vgg.parameters():

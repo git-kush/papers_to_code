@@ -32,7 +32,7 @@ class ImageFolder(Dataset):
 
 
 def test():
-    dataset = ImageFolder(root_dir="data/")
+    dataset = ImageFolder(root_dir="train_data/")
     loader = DataLoader(dataset, batch_size=1, num_workers=8)
 
     for low_res, high_res in loader:
@@ -40,9 +40,9 @@ def test():
         print(high_res.shape)
 
 
-def test_image_gen():         # to generate lowers images for testing
-    dataset = ImageFolder(root_dir="test_images_HR/")
-    output_folder = "test_images_LR/"
+def test_image_gen():  # to generate lowers images for testing
+    dataset = ImageFolder(root_dir="test_HR/")
+    output_folder = "test_data_LR/"
 
     # Create the output directory if it doesn't exist
     os.makedirs(output_folder, exist_ok=True)
@@ -52,6 +52,7 @@ def test_image_gen():         # to generate lowers images for testing
         low_res_pil = transforms.ToPILImage()(low_res.cpu().detach())
         img_file, _ = dataset.data[idx]
         low_res_pil.save(os.path.join(output_folder, f"lowres_{img_file}"))
+
 
 if __name__ == "__main__":
     test()

@@ -59,7 +59,7 @@ class ResidualBlock(nn.Module):
     def forward(self, x):
         out = self.block1(x)
         out = self.block2(out)
-        return out + x
+        return out + x                   # skip connection
 
 
 class Generator(nn.Module):
@@ -113,15 +113,14 @@ class Discriminator(nn.Module):
 
 def test():
     low_resolution = 24  # 96x96 -> 24x24
-    with torch.cuda.amp.autocast():
-        x = torch.randn((5, 3, low_resolution, low_resolution))
-        gen = Generator()
-        gen_out = gen(x)
-        disc = Discriminator()
-        disc_out = disc(gen_out)
+    x = torch.randn((5, 3, low_resolution, low_resolution))
+    gen = Generator()
+    gen_out = gen(x)
+    disc = Discriminator()
+    disc_out = disc(gen_out)
 
-        print(gen_out.shape)
-        print(disc_out.shape)
+    print(gen_out.shape)
+    print(disc_out.shape)
 
 
 if __name__ == "__main__":
