@@ -19,4 +19,5 @@ This model uses perceptual loss method in which they have used feature maps from
 SRGAN, being a deep ResNet model requires much computation, I trained it for 100 epochs only.\
 Below is the its output on a random crop from a downscaled image from DIV2K_validation_HR
 
---image to be added--
+<img src="./test_in.jpg" alt="Arch"> INPUT \
+<img src="./lowres_0801.png" alt="Arch">   OUTPUT
